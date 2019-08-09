@@ -44,6 +44,20 @@ class Users extends Model {
 
     return super.create.call(this, newUser);
   }
+
+  get(user, callback) {
+
+    return super.get.call(this, user)
+      .then((text) => {
+        return text;
+      });
+
+
+
+    // return userData;
+
+    // return users;
+  }
 }
 
 module.exports = new Users();
