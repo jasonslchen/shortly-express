@@ -442,18 +442,22 @@ describe('', function() {
         var username = 'BillZito';
 
         db.query('INSERT INTO users (username) VALUES (?)', username, function(error, results) {
+          // console.log('result', results);
           if (error) { return done(error); }
           var userId = results.insertId;
+
 
           createSession(requestWithoutCookie, response, function() {
             var hash = requestWithoutCookie.session.hash;
             db.query('UPDATE sessions SET userId = ? WHERE hash = ?', [userId, hash], function(error, result) {
 
+              // console.log('req', requestWithoutCookie.session.userID);
               var secondResponse = httpMocks.createResponse();
               var requestWithCookies = httpMocks.createRequest();
               requestWithCookies.cookies.shortlyid = hash;
 
               createSession(requestWithCookies, secondResponse, function() {
+                // console.log('req2', requestWithoutCookie.session.userID);
                 var session = requestWithCookies.session;
                 expect(session).to.be.an('object');
                 expect(session.user.username).to.eq(username);
