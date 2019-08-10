@@ -1,6 +1,6 @@
 const parseCookies = (req, res, next) => {
 
-  if (req.headers.cookie){
+  if (req.headers.cookie) {
     let string = JSON.parse(`"${req.headers.cookie}"`);
 
     let cookieSplitter = string.split(';').map((string) => string.trim().split('=')).forEach((tuple) => {
