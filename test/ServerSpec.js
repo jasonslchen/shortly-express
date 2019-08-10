@@ -123,7 +123,7 @@ describe('', function() {
     });
   });
 
-  xdescribe('Account Creation:', function() {
+  describe('Account Creation:', function() {
 
     it('signup creates a new user record', function(done) {
       var options = {
@@ -460,6 +460,7 @@ describe('', function() {
                 // console.log('req2', requestWithoutCookie.session.userID);
                 var session = requestWithCookies.session;
                 expect(session).to.be.an('object');
+                console.log('user test', session.user);
                 expect(session.user.username).to.eq(username);
                 expect(session.userId).to.eq(userId);
                 done();

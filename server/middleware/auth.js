@@ -5,58 +5,66 @@ module.exports.createSession = (req, res, next) => {
 
   return models.Sessions.create()
     .then((session) => {
-      // console.log('is there any session?', session.insertId);
       req.session = session;
-      models.Sessions.get({id: session.insertId})
+      return req.session;
+    })
+    .then((sessin) => {
+      models.Sessions.get({id: sessin.insertId})
         .then((sesh) => {
-          // console.log("the sesh",sesh);
-          req.session.hash = sesh.hash;
-          res.cookies.shortlyid = {value: sesh.hash};
-          // console.log("out", req);
-          return req;
-        })
-        .then((request) => {
-          // console.log('big boss', request);
-          if (!!request.cookies) {
-            // console.log('typeof', (request.cookies.shortlyid))
-            // console.log('insertID', request.cookies.shortlyid);
-            models.Sessions.get({hash: request.cookies.shortlyid})
-            .then((value) => {
-              req.session.userId = value.userId;
-              req.session.user = {};
-              req.session.user.username = value.user.username;
-              // console.log('returned', value);
-              // console.log('userId', req.session);
-              // console.log('user', value.user.username);
-              // console.log('user', req.session)
-            })
-            .then(() => {
-              next();
-            })
-
-          }
-          // models.Sessions.get({id: request.session.insertId})
-          // .then((value) => {
-          //   console.log('return', value);
-          // })
+          // if(Object.keys(req.cookies).length === 0) {
+          sessin.hash = sesh.hash;
+          res.cookies = {shortlyid: {value: sesh.hash}};
+          // }s
         })
         .then(() => {
-          next();
+          if (Object.keys(req.cookies).length !== 0) {
+            // console.log('ck', req.cookies)
+            models.Sessions.get({hash: req.cookies.shortlyid})
+              .then((value) => {
+                console.log('val', value);
+                if (!req.session.user) {
+                  req.session.user = {};
+                  if (value.userId !== null) {
+                    console.log('user', req.session.user);
+                    req.session.userId = value.userId;
+                    req.session.user.username = value.user.username;
+                  }
+                } else {
+                  next();
+                }
+              });
+          } else {
+            next();
+          }
         });
-    })
-    .catch(() => {
-      console.log(':( ');
     });
-  //  }
- //have to refactor code
- //put alot if if statements and elses to account for if userid and stuff is there
-  // .then(())
-
-  // .then(() => {
-  //   next();
-  // })
-
 };
+//       .catch(() => {
+//         console.log('no user id');
+//         // next();
+//       });
+//   }
+// })
+// .then(() => {
+//   next();
+// })
+// .catch(() => {
+//   console.log('err');
+//   // next();
+// });
+
+// .then(() => {
+//   next();
+// })
+// .catch(() => {
+//   next();
+// })
+//     .catch(() => {
+//       console.log('userId not found');
+//       next();
+//     });
+// .catch(() => {
+//   console.log(':( ');
 
 /************************************************************/
 // Add additional authentication middleware functions below
