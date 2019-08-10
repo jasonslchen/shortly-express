@@ -94,7 +94,6 @@ app.post('/login', (req, res) => {
   models.Users.get({username: req.body.username})
     .then((text) => text)
     .then((userData) => {
-      console.log('user', userData);
       if (models.Users.compare(req.body.password, userData.password, userData.salt)) {
         res.redirect(301, '/');
       } else {
