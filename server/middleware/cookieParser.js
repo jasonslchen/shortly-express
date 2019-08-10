@@ -1,3 +1,5 @@
+// const newSession = require ('./auth.js');
+
 const parseCookies = (req, res, next) => {
 
   if (req.headers.cookie) {
@@ -8,6 +10,7 @@ const parseCookies = (req, res, next) => {
     });
   } else {
     req.cookies = {};
+    //pass in session creater from auth.js
   }
   next();
 

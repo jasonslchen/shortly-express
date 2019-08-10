@@ -366,6 +366,7 @@ describe('', function() {
             otherCookie: '2a990382005bcc8b968f2b18f8f7ea490e990e78',
             anotherCookie: '8a864482005bcc8b968f2b18f8f7ea490e577b20'
           });
+
           done();
         });
       });
